@@ -1,0 +1,288 @@
+openapi: 3.0.2
+info:
+  title: API-First Spring Boot Example
+  description: "Simple example of API-First integration in a Spring Boot application!"
+  version: 1.0.0-SNAPSHOT
+tags:
+  - name: pets
+    description: Operations with pets
+  - name: tags
+    description: Operations with tags
+  - name: auth
+    description: Authentication operations
+paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: log in user
+      description: generate JWT
+      operationId: login
+      requestBody:
+        description: Retrieve token for user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
+
+  /auth/registration:
+    post:
+      tags:
+        - auth
+      summary: register a new user as customer user
+      description: generate JWT
+      operationId: registration
+      requestBody:
+        description: Register a new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        401:
+          description: Email already used
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
+  /pets:
+    get:
+      tags:
+        - pets
+      summary: Get all pets
+      description: Get all pets
+      operationId: findAllPets
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetDTO'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              example:
+                code: REQUEST_VALIDATION_ERROR
+                error: There are some validation errors
+    post:
+      tags:
+        - pets
+      summary: Create pet
+      description: Create a new pet in the system
+      operationId: createPet
+      requestBody:
+        description: Pet to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetDTO'
+        required: true
+      responses:
+        201:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDTO'
+      x-codegen-request-body-name: body
+    put:
+      tags:
+        - pets
+      summary: Update pet
+      description: Update pet in the system
+      operationId: updatePet
+      requestBody:
+        description: Updated pet
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetDTO'
+        required: true
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDTO'
+        404:
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+      x-codegen-request-body-name: body
+
+  /pets/{petId}:
+    get:
+      tags:
+        - pets
+      summary: Get a pet by ID
+      description: Get a pet by ID
+      operationId: findPetById
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDTO'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              example:
+                code: REQUEST_VALIDATION_ERROR
+                error: There are some validation errors
+        404:
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+    delete:
+      tags:
+        - pets
+      summary: Delete a pet
+      description: Delete a pet
+      operationId: DeletePet
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetDTO'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              example:
+                code: REQUEST_VALIDATION_ERROR
+                error: There are some validation errors
+        404:
+          description: Pet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+
+components:
+  schemas:
+    PetDTO:
+      type: object
+      required:
+        - name
+        - type
+        - color
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: string
+        breed:
+          type: string
+        color:
+          type: string
+        size:
+          enum: [mini,standard,large,XL]
+        age:
+          type: integer
+
+    AuthRequest:
+      type: object
+      required:
+        - password
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+    AuthResponse:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        token:
+          type: string
+
+    UserDTO:
+      type: object
+      required:
+        - id
+        - email
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+          format: email
+
+    ErrorDTO:
+      type: object
+      properties:
+        code:
+          type: string
+          example: PET_NOT_FOUND
+        error:
+          type: string
+          example: The pet was not found
