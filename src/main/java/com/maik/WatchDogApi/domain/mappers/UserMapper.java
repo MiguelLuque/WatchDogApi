@@ -1,7 +1,7 @@
 package com.maik.WatchDogApi.domain.mappers;
 
 import com.maik.WatchDogApi.domain.entities.User;
-import com.maik.WatchDogApi.models.dto.UserDTO;
+import com.maik.WatchdogApi.models.dto.UserDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;

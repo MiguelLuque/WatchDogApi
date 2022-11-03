@@ -1,6 +1,6 @@
 package com.maik.WatchDogApi.exceptions;
 
-import com.maik.WatchDogApi.models.dto.ErrorDTO;
+import com.maik.WatchdogApi.models.dto.ErrorDTO;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

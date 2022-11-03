@@ -1,9 +1,9 @@
 package com.maik.WatchDogApi.web;
 
-import com.maik.WatchDogApi.api.AuthApiDelegate;
 import com.maik.WatchDogApi.domain.services.interfaces.AuthService;
-import com.maik.WatchDogApi.models.dto.AuthRequest;
-import com.maik.WatchDogApi.models.dto.AuthResponse;
+import com.maik.WatchdogApi.api.AuthApiDelegate;
+import com.maik.WatchdogApi.models.dto.AuthRequest;
+import com.maik.WatchdogApi.models.dto.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,8 +4,8 @@ import com.maik.WatchDogApi.domain.entities.User;
 import com.maik.WatchDogApi.domain.mappers.UserMapper;
 import com.maik.WatchDogApi.domain.repositories.UserRepository;
 import com.maik.WatchDogApi.domain.services.interfaces.UserService;
-import com.maik.WatchDogApi.models.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
+import com.maik.WatchdogApi.models.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +28,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(Long id) {
         return userRepository.findById(id).map(userMapper::toDto).orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
+    @Override
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     @Override

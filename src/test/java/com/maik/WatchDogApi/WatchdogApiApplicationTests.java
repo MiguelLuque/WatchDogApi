@@ -1,6 +1,6 @@
 package com.maik.WatchDogApi;
 
-import com.maik.WatchDogApi.domain.repositories.PetRepository;
+import com.maik.WatchDogApi.domain.repositories.AnnouncementRepository;
 import com.maik.WatchDogApi.domain.repositories.RoleRepository;
 import com.maik.WatchDogApi.domain.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class WatchdogApiApplicationTests {
 	private RoleRepository roleRepository;
 
 	@MockBean
-	private PetRepository petRepository;
+	private AnnouncementRepository announcementRepository;
 
 	@Test
 	void contextLoads() {

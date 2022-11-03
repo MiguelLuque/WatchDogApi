@@ -4,8 +4,8 @@ info:
   description: "Simple example of API-First integration in a Spring Boot application!"
   version: 1.0.0-SNAPSHOT
 tags:
-  - name: pets
-    description: Operations with pets
+  - name: announcements
+    description: Operations with announcements
   - name: tags
     description: Operations with tags
   - name: auth
@@ -68,22 +68,62 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
 
-  /pets:
+  /announcements:
     get:
       tags:
-        - pets
-      summary: Get all pets
-      description: Get all pets
-      operationId: findAllPets
+        - announcements
+      summary: Get all announcements sorted by date
+      description: Get all announcements
+      operationId: findAllAnnouncements
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: The number of pages to skip before starting to collect the result set
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: description
+          schema:
+            type: string
+        - in: query
+          name: postalCode
+          schema:
+            type: string
+        - in: query
+          name: name
+          schema:
+            type: string
+        - in: query
+          name: breed
+          schema:
+            type: string
+        - in: query
+          name: province
+          schema:
+            type: string
+        - in: query
+          name: location
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          schema:
+            type: string
+        - in: query
+          name: endDate
+          schema:
+            type: string
       responses:
         200:
           description: Successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PetDTO'
+                $ref: '#/components/schemas/AnnouncementPage'
         400:
           description: Bad request
           content:
@@ -93,18 +133,19 @@ paths:
               example:
                 code: REQUEST_VALIDATION_ERROR
                 error: There are some validation errors
+
     post:
       tags:
-        - pets
-      summary: Create pet
-      description: Create a new pet in the system
-      operationId: createPet
+        - announcements
+      summary: Create an announcement
+      description: Create a new announcement in the system
+      operationId: createAnnouncement
       requestBody:
-        description: Pet to be created
+        description: Announcement to be created
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PetDTO'
+              $ref: '#/components/schemas/AnnouncementDto'
         required: true
       responses:
         201:
@@ -112,20 +153,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PetDTO'
+                $ref: '#/components/schemas/AnnouncementDto'
       x-codegen-request-body-name: body
     put:
       tags:
-        - pets
-      summary: Update pet
-      description: Update pet in the system
-      operationId: updatePet
+        - announcements
+      summary: Update announcement
+      description: Update announcement in the system
+      operationId: updateAnnouncement
       requestBody:
-        description: Updated pet
+        description: Updated announcement
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PetDTO'
+              $ref: '#/components/schemas/AnnouncementDto'
         required: true
       responses:
         200:
@@ -133,24 +174,66 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PetDTO'
+                $ref: '#/components/schemas/AnnouncementDto'
         404:
-          description: Pet not found
+          description: Announcement not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorDTO'
+                $ref: '#/components/schemas/AnnouncementDto'
       x-codegen-request-body-name: body
 
-  /pets/{petId}:
+
+  /users/{userId}/announcements:
     get:
       tags:
-        - pets
-      summary: Get a pet by ID
-      description: Get a pet by ID
-      operationId: findPetById
+        - announcements
+      summary: Get all announcements from an user
+      description: Get all announcements from an user
+      operationId: findAllUserAnnouncements
       parameters:
-        - name: petId
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: The number of pages to skip before starting to collect the result set
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: description
+          schema:
+            type: string
+        - in: query
+          name: postalCode
+          schema:
+            type: string
+        - in: query
+          name: name
+          schema:
+            type: string
+        - in: query
+          name: breed
+          schema:
+            type: string
+        - in: query
+          name: province
+          schema:
+            type: string
+        - in: query
+          name: location
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          schema:
+            type: string
+        - in: query
+          name: endDate
+          schema:
+            type: string
+        - name: userId
           in: path
           required: true
           schema:
@@ -162,7 +245,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PetDTO'
+                $ref: '#/components/schemas/AnnouncementPage'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              example:
+                code: REQUEST_VALIDATION_ERROR
+                error: There are some validation errors
+
+  /announcements/{announcementId}:
+    get:
+      tags:
+        - announcements
+      summary: Get a announcement by ID
+      description: Get a announcement by ID
+      operationId: findAnnouncementById
+      parameters:
+        - name: announcementId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementDto'
         400:
           description: Bad request
           content:
@@ -173,19 +287,19 @@ paths:
                 code: REQUEST_VALIDATION_ERROR
                 error: There are some validation errors
         404:
-          description: Pet not found
+          description: Announcement not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
     delete:
       tags:
-        - pets
-      summary: Delete a pet
-      description: Delete a pet
-      operationId: DeletePet
+        - announcements
+      summary: Delete a announcement
+      description: Delete a announcement
+      operationId: DeleteAnnouncement
       parameters:
-        - name: petId
+        - name: announcementId
           in: path
           required: true
           schema:
@@ -197,9 +311,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PetDTO'
+                $ref: '#/components/schemas/AnnouncementDto'
         400:
           description: Bad request
           content:
@@ -210,7 +322,7 @@ paths:
                 code: REQUEST_VALIDATION_ERROR
                 error: There are some validation errors
         404:
-          description: Pet not found
+          description: Announcement not found
           content:
             application/json:
               schema:
@@ -218,19 +330,30 @@ paths:
 
 components:
   schemas:
-    PetDTO:
+    AnnouncementDto:
       type: object
       required:
-        - name
-        - type
-        - color
+        - title
+        - description
+        - specie
+        - contact
+        - date
+        - location
+        - hasChip
+        - isOwner
       properties:
         id:
           type: integer
           format: int64
-        name:
+        title:
           type: string
-        type:
+          minLength: 10
+          maxLength: 80
+        description:
+          type: string
+          minLength: 10
+          maxLength: 300
+        specie:
           type: string
         breed:
           type: string
@@ -238,8 +361,46 @@ components:
           type: string
         size:
           enum: [mini,standard,large,XL]
-        age:
+        street:
+          type: string
+        postalCode:
+          type: string
+        contact:
+          type: string
+        province:
+          type: string
+        location:
+          type: string
+        date:
+          type: string
+        hasChip:
+          type: boolean
+        isOwner:
+          type: boolean
+        picture:
+          type: string
+          format: base64
+        name:
+          type: string
+        ownerId:
           type: integer
+          format: int64
+
+    AnnouncementPage:
+      type: object
+      required:
+        - totalPages
+        - currentPage
+        - content
+      properties:
+        totalPages:
+          type: number
+        currentPage:
+          type: number
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnnouncementDto'
 
     AuthRequest:
       type: object
@@ -285,4 +446,4 @@ components:
           example: PET_NOT_FOUND
         error:
           type: string
-          example: The pet was not found
+          example: The announcement was not found

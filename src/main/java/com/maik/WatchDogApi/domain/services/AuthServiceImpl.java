@@ -6,9 +6,10 @@ import com.maik.WatchDogApi.domain.entities.User;
 import com.maik.WatchDogApi.domain.repositories.RoleRepository;
 import com.maik.WatchDogApi.domain.services.interfaces.AuthService;
 import com.maik.WatchDogApi.domain.services.interfaces.UserService;
-import com.maik.WatchDogApi.models.dto.AuthRequest;
-import com.maik.WatchDogApi.models.dto.AuthResponse;
-import com.maik.WatchDogApi.models.dto.UserDTO;
+
+import com.maik.WatchdogApi.models.dto.AuthRequest;
+import com.maik.WatchdogApi.models.dto.AuthResponse;
+import com.maik.WatchdogApi.models.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
