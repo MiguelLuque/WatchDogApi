@@ -31,8 +31,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public AnnouncementPage findAll(Integer page, String title, String description, String postalCode, String name, String breed, String province, String location, String startDate, String endDate) {
-        String s = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        Pageable pageParams = PageRequest.of(page, 1, Sort.by("date").descending());
+        // TODO: Allow filtering by any field with general search
+        // TODO: Set picture attribute as request part and store it in the database
+        Pageable pageParams = PageRequest.of(page, 10, Sort.by("date").descending());
         Announcement announcement = Announcement.builder()
                 .title(title)
                 .description(description)
@@ -44,6 +45,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 .build();
         ExampleMatcher matcher = ExampleMatcher
                 .matchingAll()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase()
                 .withIgnorePaths("isOwner")
                 .withIgnoreNullValues();
         Page<Announcement> res =  announcementRepository.findAll(Example.of(announcement, matcher), pageParams);
@@ -54,7 +57,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public AnnouncementPage findAllByUserId(Long userId, Integer page, String title, String description, String postalCode, String name, String breed, String province, String location, String startDate, String endDate) {
-        Pageable pageParams = PageRequest.of(page, 1, Sort.by("date").descending());
+        Pageable pageParams = PageRequest.of(page, 10, Sort.by("date").descending());
         Announcement announcement = Announcement.builder()
                 .title(title)
                 .description(description)
@@ -72,6 +75,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Page<Announcement> res =  announcementRepository.findAll(Example.of(announcement, matcher), pageParams);
         List<AnnouncementDto> announcementDtos = announcementMapper.toDto(res.getContent());
         return MapperUtils.toAnnouncementPage(res.getTotalPages(), res.getNumber(), announcementDtos);
+    }
+
+    @Override
+    public AnnouncementPage findAllMyAnnouncements(Integer page, String title, String description, String postalCode, String name, String breed, String province, String location, String startDate, String endDate) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.findAllByUserId(currentUser.getId(), page, title, description, postalCode, name, breed, province, location, startDate, endDate);
     }
 
     @Override
@@ -104,8 +113,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public AnnouncementDto update(AnnouncementDto petDTO) {
-        Announcement announcement = announcementMapper.toEntity(petDTO);
+    public AnnouncementDto update(AnnouncementDto announcementDto) {
+        // TODO: Dont allow change owner
+        Announcement announcement = announcementMapper.toEntity(announcementDto);
         if(!checkIfExists(announcement.getId()).isPresent()) {
             throw new IllegalArgumentException("Announcement not found");
         }

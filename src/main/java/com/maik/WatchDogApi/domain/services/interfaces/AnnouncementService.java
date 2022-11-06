@@ -11,6 +11,8 @@ public interface AnnouncementService {
 
     AnnouncementPage findAllByUserId(Long userId, Integer page, String title, String description, String postalCode, String name, String breed, String province, String location, String startDate, String endDate);
 
+    AnnouncementPage findAllMyAnnouncements(Integer page, String title, String description, String postalCode, String name, String breed, String province, String location, String startDate, String endDate);
+
     AnnouncementDto findById(Long id);
 
     AnnouncementDto findByName(String name);

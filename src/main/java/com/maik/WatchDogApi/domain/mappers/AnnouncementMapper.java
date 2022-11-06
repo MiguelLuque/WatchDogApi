@@ -31,6 +31,7 @@ public interface AnnouncementMapper {
      */
     @Mapping(target = "picture", ignore = true)
     @Mapping(target = "id", nullValueCheckStrategy = NullValueCheckStrategy.ON_IMPLICIT_CONVERSION)
+    @Mapping(target = "user.id", source = "target.ownerId", nullValueCheckStrategy = NullValueCheckStrategy.ON_IMPLICIT_CONVERSION)
     @Mapping(target = "date", source = "target.date", dateFormat = "dd/MM/yyyy")
     Announcement toEntity(AnnouncementDto target);
 

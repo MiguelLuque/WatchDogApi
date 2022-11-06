@@ -68,6 +68,74 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorDTO'
 
+
+  /announcements/my-announcements:
+    get:
+      tags:
+        - announcements
+      summary: Get all announcements sorted by date
+      description: Get all announcements
+      operationId: findMyAnnouncements
+      parameters:
+        - in: query
+          required: true
+          name: page
+          schema:
+            type: integer
+          description: The number of pages to skip before starting to collect the result set
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: description
+          schema:
+            type: string
+        - in: query
+          name: postalCode
+          schema:
+            type: string
+        - in: query
+          name: name
+          schema:
+            type: string
+        - in: query
+          name: breed
+          schema:
+            type: string
+        - in: query
+          name: province
+          schema:
+            type: string
+        - in: query
+          name: location
+          schema:
+            type: string
+        - in: query
+          name: startDate
+          schema:
+            type: string
+        - in: query
+          name: endDate
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementPage'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDTO'
+              example:
+                code: REQUEST_VALIDATION_ERROR
+                error: There are some validation errors
+
   /announcements:
     get:
       tags:
@@ -77,6 +145,7 @@ paths:
       operationId: findAllAnnouncements
       parameters:
         - in: query
+          required: true
           name: page
           schema:
             type: integer
@@ -193,6 +262,7 @@ paths:
       operationId: findAllUserAnnouncements
       parameters:
         - in: query
+          required: true
           name: page
           schema:
             type: integer

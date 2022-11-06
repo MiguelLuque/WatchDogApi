@@ -26,6 +26,12 @@ public class AnnouncementsApiDelegateImpl implements AnnouncementsApiDelegate {
     }
 
     @Override
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR", "ROLE_CUSTOMER"})
+    public ResponseEntity<AnnouncementPage> findMyAnnouncements(Integer page, String title, String description, String postalCode, String name, String breed, String province, String location, String startDate, String endDate) {
+        return ResponseEntity.ok(announcementService.findAllMyAnnouncements(page, title, description, postalCode, name, breed, province, location, startDate, endDate));
+    }
+
+    @Override
 //    @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR", "ROLE_CUSTOMER"})
     public ResponseEntity<AnnouncementDto> createAnnouncement(AnnouncementDto body) {
         return ResponseEntity.created(null).body(announcementService.save(body));
